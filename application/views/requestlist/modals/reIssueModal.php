@@ -67,49 +67,72 @@
  
 
  <script>
- $(document).ready(function(){
-    var item_id = <?php echo $item->id?>;
-    var qty = $(`#aj_qty${item_id}`).val();
-    var serialuri = `<?php echo base_url()?>/requestlist/getserialno/`;
-    $(`#re-issueModal_${item_id}`).on('shown.bs.modal', function () {
-        $(".form1").remove();
 
+ $(document).ready(function(){
+     var item_id = `<?php echo $item->id?>`;
+     var base_url = `<?php echo base_url()?>`;
+     var qty = $('#aj_qty' +item_id).val();
+     var count = 0;
+    $(`#re-issueModal_${item_id}`).on("shown.bs.modal", function () {
+	    $(".form1").remove();
+	// console.log(`${base_url}requestlist/getserialno/${item_id}`);
+	
         $.ajax({
-            url: serialuri,
+            url: `${base_url}requestlist/getserialno`,
             type: 'GET',
             data: {item_id},
             success: function(resultset){
-                console.log(resultset.data);
-                if(resultset.message == 'success'){
-                    resultset.data.forEach((data, i) => {
+                const { message, data } = resultset;
+                console.log('hello world');
+                if (message == "success") {
+                        if(data === true){
+                            data.forEach((data, i) => {
+                            $(`#re-issueForm${item_id}`)
+                                .append(`<div class="form-row form1" id="test${i}">
+                                    <div class="col-md-2">
+                                        <strong>Serial# </strong>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div class="form-group">
+                                            <input type="text" form="issueForm<?php echo $item->id?>" value="${data}" class="form-control" placeholder="Provide Serial Number" name="serial_no[]";>
+                                        </div>
+                                    </div>
+                                </div>`);
                         
-                        $(`#re-issueForm${item_id}`).append(`<div class="form-row form1" id="test${i}">
-                            <div class="col-md-2">
-                                <strong>Serial# </strong>
-                            </div>
-                            <div class="col-md-10">
-                                <div class="form-group">
-                                    <input type="text" form="issueForm<?php echo $item->id?>" value="${data}" class="form-control" placeholder="Provide Serial Number" name="serial_no[]";>
-                                </div>
-                            </div>
-                        </div>`);
-                    })
+                            });
+                        }else{
+                            var x = 0;
+                            for (var i = 0; i < qty; i++) {
+                                    $(`#re-issueForm${item_id}`)
+                                        .append(`<div class="form-row form1" id="test${x}">
+                                            <div class="col-md-2">
+                                                <strong>Serial# </strong>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="form-group">
+                                                    <input type="text" form="issueForm<?php echo $item->id?>" class="form-control" placeholder="Provide Serial Number" name="serial_no[]";>
+                                                </div>
+                                            </div>
+                                            <div className="col-md-2" ><i class="fa fa-trash text-danger" style="cursor: pointer" id="trash${i} onclick="deleteItem(${i})"></i></div>
+                                        </div>`);
+                                }
+                                x++;
+                            }
                 }
             },
             error: function(){
-                console.log('failed')
+                console.log('error');
             }
-            })
+        })    
+    })
 
+    $(`#addBtn${item_id}`).click(() => {
+			qty = parseInt(qty) + 1;
 
-    });
+			$(`#aj_qty${item_id}`).val(qty);
 
-    $(`#addBtn${item_id}`).click(()=>{
-        qty = parseInt(qty) + 1;
-
-        $(`#aj_qty${item_id}`).val(qty)
-        
-        $(`#re-issueForm${item_id}`).append(`<div class="form-row form1" id="test">
+			$(`#re-issueForm${item_id}`)
+				.append(`<div class="form-row form1" id="test">
                 <div class="col-md-2">
                     <strong>Serial# </strong>
                 </div>
@@ -118,35 +141,13 @@
                         <input type="text" form="issueForm<?php echo $item->id?>" class="form-control" placeholder="Provide Serial Number" name="serial_no[]";>
                     </div>
                 </div>
-                </div>`)
-    })
-
-     $(`#aj_qty${item_id}`).change(() => {
-         $(".form1").remove();
-         
-        var qty = $(`#aj_qty${item_id}`).val();
-        var i = 0;
-        
-        // $('#assignForm1').append('<h4>Provide Serial Numbers Below</h4>')
-        for(var i=0; i < qty; i++){
-            $(`#re-issueForm${item_id}`).append(`<div class="form-row form1" id="test">
-                <div class="col-md-2">
-                    <strong>Serial# </strong>
-                </div>
-                <div class="col-md-8">
-                    <div class="form-group">
-                        <input type="text" form="issueForm<?php echo $item->id?>" class="form-control" placeholder="Provide Serial Number" name="serial_no[]";>
-                    </div>
-                </div>
-                    <div class="col-md-2">
-                        <button class="btn btn-sm btn-danger rmserial">X ${i}</button>
-                    </div>
                 </div>`);
-            }
-    })
-            
-    $('#issueFormbtn'+ item_id).click(() => {
-        console.log($('#issueForm'+item_id).serializeArray())
-    })
- })
+		});
+
+    function deleteItem(item_id){
+        console.log(item_id)
+    }
+})
+
+   
  </script>

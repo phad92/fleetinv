@@ -1,6 +1,6 @@
-            <button type="button" class="btn btn-primary" data-toggle="modal" style="margin: 10px 0;" data-target="#addRequestListItem">
+            <!-- <button type="button" class="btn btn-primary" data-toggle="modal" style="margin: 10px 0;" data-target="#addRequestListItem">
               Add Item to List
-            </button>
+            </button> -->
             
            <?php if(!empty($requestitems)):?>
             <div class="card card-default">
@@ -30,8 +30,8 @@
                     <td><?php echo $record->status?></td>
                     <td><?php echo $record->entry_date?></td>
                     <td id="actions">
-                        <a href="#editRequestListItem_<?php echo $record->id?>" class="btn btn-xs btn-primary item-edit-btn" data-toggle="modal"  style="margin: 10px 0;" >edit</a>
-                        <a href="<?php echo base_url()?>requestlistitem/delete/<?php echo $record->id?>?requestId=<?php echo $request->id?>" class="btn btn-xs btn-danger">delete</a>
+                        <!-- <a href="#editRequestListItem_<?php echo $record->id?>" class="btn btn-xs btn-primary item-edit-btn" data-toggle="modal"  style="margin: 10px 0;" >edit</a> -->
+                        <!-- <a href="<?php //echo base_url()?>requestlistitem/delete/<?php echo $record->id?>?requestId=<?php echo $request->id?>" class="btn btn-xs btn-danger">delete</a> -->
                     </td>
                     
                   </tr>

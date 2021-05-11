@@ -52,25 +52,12 @@ class RequestList extends CI_Controller{
         redirect($_SERVER['HTTP_REFERER']);
     }
 
-    public function insertAddedRequestItems($request_id, $listData){
-        $lists = $this->requestitems->getByRequestId($request_id)->result_array();
-        // pp($list);
+    public function insertAddedRequestItems($listitems, $listData){
+        // $lists = $this->requestitems->getByRequestId($request_id)->result_array();
+        pp($listitems);
         $newList = [];
         foreach ($listData as $value) {
-            // pp($listData);
-            foreach($lists as $item){
-                // if($value['vehicle_id'] !== $item['vehicle_id']){
-                    if(in_array($value['vehicle_id'], $item)){
-                        print_r($item); 
-                        print_r($value).'</br></br>';
-                        array_push($newList, $value);
-
-                    }
-                // }
-                
-            }
-            // print_r($newList);
-
+           
 
         }
 
@@ -82,18 +69,10 @@ class RequestList extends CI_Controller{
         if($this->form_validation->run()){
             $form_data = $this->getRequestInputData();
             $listData = $this->requestListItemData($form_data, $request_id);
-            $listitems = $this->requestitems->getByRequestId($request_id)->result();
-            // pp($listData);
+            $listitems = $this->requestitems->getByRequestId($request_id)->result_array();
             if($this->model->update($request_id, $form_data)){
-                // pp(count($listitems) .' '. count($listData));
-                // if( count($listData) > count($listitems)){
-                //     $this->requestitems->deleteByRequestId($request_id);
-                //     $this->requestitems->insert_batch($listData);
-                // }else{
-                    
-                // }
-                $this->requestitems->update_batch($listData, 'request_id');
-                // $this->insertAddedRequestItems($request_id, $listData);
+                $this->requestitems->deleteByRequestId($request_id);
+                $this->requestitems->insert_batch($listData);
                 set_flashdata('success', 'New Request Successfully Updated');
             }else{
                 
@@ -162,12 +141,12 @@ class RequestList extends CI_Controller{
     public function jqForm(){
         $vehicle_no = $_POST['vehicle_no'];
         $vehicle_id = $_POST['vehicle_id'];
-        $request_type_id = $_POST['request_type_id'];
-        $vendor_id = $_POST['vendor_id'];
-        $item_id = $_POST['item_id'];
-        $date_needed = $_POST['date_needed'];
-        $unit_price = $_POST['unit_price'];
-        $justification = $_POST['justification'];
+        // $request_type_id = $_POST['request_type_id'];
+        // $vendor_id = $_POST['vendor_id'];
+        // $item_id = $_POST['item_id'];
+        // $date_needed = $_POST['date_needed'];
+        // $unit_price = $_POST['unit_price'];
+        // $justification = $_POST['justification'];
 
         $vehicles = array_merge($vehicle_id, $vehicle_no);
         pp($vehicles);
@@ -491,9 +470,10 @@ class RequestList extends CI_Controller{
 
     public function getSerialNo(){
         $item_id = $_GET['item_id'];
+
+        // pp('hello');
         $requestitems = $this->requestitems->getWhere($item_id)->row();
         $serialNos = unserialize($requestitems->serial_no);
-        // pp($requestitems);
         echo send_json(array('message' => 'success', 'data' => $serialNos));
     }
 
@@ -849,6 +829,7 @@ class RequestList extends CI_Controller{
 
     public function getRequestName($request_type_id){
         $request = $this->requesttype->getWhere($request_type_id)->row();
+        
         return $request->request_name;
     }
 

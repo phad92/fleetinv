@@ -182,7 +182,7 @@ $(document).ready(function(){
                                 <input id="vehicle_id${row_count}" type="hidden" class="form-control" value="${vehicle_id}" name="vehicle_id[]"/>
                                 <input id="vehicle_no${row_count}" type="hidden" class="form-control" value="${data.vehicle_no}" name="vehicle_no[]"/>
                             </td>
-                        <td><i class="fa fa-trash text-danger" style="cursor: pointer" onclick=(deleteRow(${row_count})) aria-hidden="true"></i></td>
+                        <td><i class="fa fa-trash text-danger" style="cursor: pointer" onclick="deleteRow(${row_count})" aria-hidden="true"></i></td>
                         </tr>`;
                         
                         $('#itemsTable > tbody').append(tr);
