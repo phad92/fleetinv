@@ -24,7 +24,7 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <label for="total_qty">Available Quantity</label>
+                                    <label for="total_qty">Quantity Received</label>
                                     <input type="text" class="form-control"  <?php echo set_readonly()?> value="<?php echo $request->total_qty?>" name="total_qty">
                                 </div>
                             </div>
@@ -85,7 +85,7 @@
                     <td><?php echo $record->entry_date?></td>
                     <td id="actions">
                         <a href="#re-issueModal_<?php echo $record->id?>" class="btn btn-xs btn-info" data-toggle="modal"  style="margin: 10px 0;" >Edit Item</a>
-                        <a href="<?php echo base_url()?>requestlistitem/delete/<?php echo $record->id?>" class="btn btn-xs btn-danger">Remove Item</a>
+                        <!-- <a href="<?php echo base_url()?>requestlistitem/delete/<?php echo $record->id?>" class="btn btn-xs btn-danger">Remove Item</a> -->
                         <!-- <a href="#approveItem_<?php echo $record->id?>" class="btn btn-xs btn-primary" data-toggle="modal"  style="margin: 10px 0;" >Apply Status</a> -->
                     </td>
                     

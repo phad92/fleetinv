@@ -248,7 +248,6 @@ class RequestList extends CI_Controller{
         $form_data['supplier_name'] = $supplier->name;
 
         if(!$this->requestStatusExists($request_id, $this->input->post('request_status'))){
-            
             unset($form_data['total_qty']);
             if($this->model->update($request_id, $form_data)){
              $status = get_status('approval');
@@ -450,7 +449,7 @@ class RequestList extends CI_Controller{
             $status = get_status('approval');
             $data['stock'] = $stockItem->stock - $qtyIssued;
             $data['stock_issued'] = $stockItem->stock_issued + $qtyIssued;
-            $data['inventory'] = $data['stock'] - $data['stock_issued'];
+            // $data['inventory'] = $data['stock'] - $data['stock_issued'];
             $data['entry_by'] = 'Admin';
             $data['entry_by_id'] = 1;
             $data['entry_date'] = date('Y-m-d H:i:s');

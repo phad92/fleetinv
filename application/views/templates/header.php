@@ -232,14 +232,24 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <?php foreach($approvalStatus as $key => $status):?>
                 <li class="nav-item">
-                  <a href="<?php echo base_url()?>requestlist/show?status=<?php echo $key?>" class="nav-link">
+                  <a href="<?php echo base_url()?>requestlist/show?status=<?php echo 'pending_approval'?>" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p><?php echo $status?> <span class="badge badge-secondary"><?php //echo count_current_status($key)?></span></p>
+                    <p><?php echo 'Approve Requests'?> <span class="badge badge-secondary"><?php //echo count_current_status($key)?></span></p>
                   </a>
                 </li>
-              <?php endforeach;?>
+                <li class="nav-item">
+                  <a href="<?php echo base_url()?>requestlist/show?status=<?php echo 'awaiting_receive'?>" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p><?php echo 'Receive Requests'?> <span class="badge badge-secondary"><?php //echo count_current_status($key)?></span></p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="<?php echo base_url()?>requestlist/show?status=<?php echo 'pending_issue'?>" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p><?php echo 'Issue Requests'?> <span class="badge badge-secondary"><?php //echo count_current_status($key)?></span></p>
+                  </a>
+                </li>
             </ul>
           </li>
           <li class="nav-item">

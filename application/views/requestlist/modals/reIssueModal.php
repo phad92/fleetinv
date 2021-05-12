@@ -54,6 +54,7 @@
             <div class="modal-footer justify-content-between">
                 <input type="hidden" form="issueForm<?php echo $item->id?>" value="<?php echo $item->request_id?>" name="request_id"/>
                 <input type="hidden" form="issueForm<?php echo $item->id?>" value="issued" name="status"/>
+                <input type="hidden" value="1" id="serial_count<?php echo $item->id?>"/>
                 <button type="button" form="issueForm<?php echo $item->id?>" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="submit" form="issueForm<?php echo $item->id?>" id='issueFormbtn<?php echo $item->id?>'  class="btn btn-primary">Save changes</button>
             </div>
@@ -71,10 +72,12 @@
  $(document).ready(function(){
      var item_id = `<?php echo $item->id?>`;
      var base_url = `<?php echo base_url()?>`;
-     var qty = $('#aj_qty' +item_id).val();
+     var serial_count = document.getElementById('serial_count' + item_id).value;
+     var qty = $('#aj_qty' +item_id).val()
      var count = 0;
-    $(`#re-issueModal_${item_id}`).on("shown.bs.modal", function () {
-	    $(".form1").remove();
+     $(`#re-issueModal_${item_id}`).on("shown.bs.modal", function () {
+         $(".form1").remove();
+         qty = $('#aj_qty' +item_id).val();
 	// console.log(`${base_url}requestlist/getserialno/${item_id}`);
 	
         $.ajax({
@@ -82,71 +85,99 @@
             type: 'GET',
             data: {item_id},
             success: function(resultset){
-                const { message, data } = resultset;
-                console.log('hello world');
+                var { message, data } = resultset;
+                data =  Object.entries(data);
+                console.log(resultset);
                 if (message == "success") {
-                        if(data === true){
-                            data.forEach((data, i) => {
-                            $(`#re-issueForm${item_id}`)
-                                .append(`<div class="form-row form1" id="test${i}">
-                                    <div class="col-md-2">
-                                        <strong>Serial# </strong>
-                                    </div>
-                                    <div class="col-md-10">
-                                        <div class="form-group">
-                                            <input type="text" form="issueForm<?php echo $item->id?>" value="${data}" class="form-control" placeholder="Provide Serial Number" name="serial_no[]";>
-                                        </div>
-                                    </div>
+                        if(data.length){
+                            data.forEach((item) => {
+                                console.log('itemset => ', item);
+                                $(`#re-issueForm${item_id}`)
+                                .append(`<div class="form-row form1" id="test${serial_count}">
+                                <div class="col-md-2">
+                                <strong>Serial# </strong>
+                                </div>
+                                <div class="col-md-8">
+                                <div class="form-group">
+                                <input type="text" form="issueForm<?php echo $item->id?>" value="${item}" class="form-control" placeholder="Provide Serial Number" name="serial_no[]";>
+                                </div>
+                                </div>
                                 </div>`);
-                        
+                                serial_count++;
                             });
                         }else{
-                            var x = 0;
                             for (var i = 0; i < qty; i++) {
                                     $(`#re-issueForm${item_id}`)
-                                        .append(`<div class="form-row form1" id="test${x}">
+                                        .append(`<div class="form-row form1" id="serial_${serial_count}">
                                             <div class="col-md-2">
                                                 <strong>Serial# </strong>
                                             </div>
                                             <div class="col-md-8">
                                                 <div class="form-group">
-                                                    <input type="text" form="issueForm<?php echo $item->id?>" class="form-control" placeholder="Provide Serial Number" name="serial_no[]";>
+                                                    <input type="text" form="issueForm<?php echo $item->id?>" id="in_${serial_count}" class="form-control" placeholder="Provide Serial Number" name="serial_no[]";>
                                                 </div>
                                             </div>
-                                            <div className="col-md-2" ><i class="fa fa-trash text-danger" style="cursor: pointer" id="trash${i} onclick="deleteItem(${i})"></i></div>
-                                        </div>`);
+                                            </div>`);
+                                            serial_count++;
                                 }
-                                x++;
                             }
-                }
-            },
-            error: function(){
-                console.log('error');
-            }
-        })    
+                        }
+                    },
+                    error: function(){
+                        console.log('error');
+                    }
+
+                })    
     })
-
+    
     $(`#addBtn${item_id}`).click(() => {
-			qty = parseInt(qty) + 1;
-
+        qty = parseInt(qty) + 1;
+        serial_count++;
 			$(`#aj_qty${item_id}`).val(qty);
-
+            
 			$(`#re-issueForm${item_id}`)
-				.append(`<div class="form-row form1" id="test">
+            .append(`<div class="form-row form1" id="serial_${serial_count}">
                 <div class="col-md-2">
                     <strong>Serial# </strong>
                 </div>
                 <div class="col-md-10">
                     <div class="form-group">
-                        <input type="text" form="issueForm<?php echo $item->id?>" class="form-control" placeholder="Provide Serial Number" name="serial_no[]";>
+                        <input type="text" form="issueForm<?php echo $item->id?>" class="form-control" id="in_${serial_count}" placeholder="Provide Serial Number" name="serial_no[]";>
                     </div>
                 </div>
                 </div>`);
-		});
+            });
+            
+            $(`#aj_qty${item_id}`).change(() => {
+				$(".form1").remove();
+                
+				var qty = $(`#aj_qty${item_id}`).val();
+				var i = 0;
+                
+				// $('#assignForm1').append('<h4>Provide Serial Numbers Below</h4>')
+				for (var i = 0; i < qty; i++) {
+                    $(`#re-issueForm${item_id}`)
+                    .append(`<div class="form-row form1" id="serial_${serial_count}">
+                        <div class="col-md-2">
+                        <strong>Serial# </strong>
+                        </div>
+                        <div class="col-md-10">
+                        <div class="form-group">
+                        <input type="text" form="issueForm<?php echo $item->id?>" class="form-control" placeholder="Provide Serial Number" name="serial_no[]";>
+                        </div>
+                        </div>
+                    </div>`);
+                    serial_count++;
+				}
+			});
 
-    function deleteItem(item_id){
-        console.log(item_id)
-    }
+
+        // $(`#re-issueForm${item_id}`).on('click',`#serial_${serial_count}`,() => {
+
+        //     // $(`#serial_${serial_count}`).remove()
+        //     qty = $(`#serial_${serial_count} input`).length;
+        //     console.log(serial_count)
+        // })
 })
 
    

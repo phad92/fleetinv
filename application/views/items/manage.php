@@ -11,9 +11,11 @@
                   <tr>
                     <th>#</th>
                     <th>Item Name</th>
-                    <th>Total Stock</th>
-                    <th>Stock Issued</th>
                     <th>Inventory</th>
+                    <th>Stock Issued</th>
+                    <th>Unit Price</th>
+                    <th>Total</th>
+                    <th>Total Amount</th>
                     <th>Entry By</th>
                     <th>Action</th>
                   </tr>
@@ -25,17 +27,18 @@
                     <td><?php echo $record->item_name?></td>
                     <td><?php echo $record->stock?></td>
                     <td><?php echo $record->stock_issued?></td>
-                    <td><?php echo $record->stock - $record->stock_issued?></td>
+                    <td><?php echo $record->unit_price?></td>
+                    <td><?php echo $record->stock + $record->stock_issued?></td>
+                    <td><?php echo $record->stock * $record->unit_price?></td>
                     <td><?php echo $record->entry_by?></td>
                     <td>
                         <a href="#stockDetail_<?php echo $record->id?>" data-toggle="modal" class="btn btn-sm btn-info">Detail</a>
-                        <a href="<?php echo base_url()?>stockitem/delete/<?php echo $record->id?>" class="btn btn-sm btn-danger">Delete</a> 
+                        <!-- <a href="<?php echo base_url()?>stockitem/delete/<?php echo $record->id?>" class="btn btn-sm btn-danger">Delete</a>  -->
                     </td>
                     
                   </tr>
                     <?php $viewParam['request']=$request; 
                           $viewParam['stockItem'] = $record;
-                          // $viewParam['stockIssued'] = 
                           $this->load->view('items/modals/detailModal',$viewParam);?> 
                     <?php endforeach;?>
                   </tbody>
