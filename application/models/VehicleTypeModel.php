@@ -7,7 +7,7 @@ class VehicleTypeModel extends CI_Model{
         $this->tablename = 'tbl_vehicle_type';
     }
     
-    public function get($order_by){
+    public function get($order_by = 'vehicle_type_id'){
         $this->db->order_by($order_by);
         return $this->db->get($this->tablename);
     }

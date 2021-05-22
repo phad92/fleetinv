@@ -7,6 +7,7 @@ class Vehicle extends CI_Controller{
     {   
         parent::__construct();
         $this->load->model('vehiclemodel', 'model');
+        $this->load->model('vehicletypemodel', 'vehicletype');
     }
 
     public function manage(){
@@ -40,6 +41,44 @@ class Vehicle extends CI_Controller{
             'message' => 'success',
             'data' => $vehicle
         ));
+    }
+
+    public function newvehicleajax(){
+        $data = $_POST;
+        // $form_data['vehicle_id'] = 400;
+        $form_data['vehicle_no'] = $this->input->post('vehicle_no');
+        $form_data['model_year'] = $this->input->post('model_year');
+        $form_data['driver_id'] = 2;
+        $form_data['vehicle_type_id'] = $this->input->post('vehicle_type_id');
+        $form_data['description'] = $this->input->post('description');
+        
+        
+        $this->form_validation->set_rules('vehicle_no', 'Vehicle Number', 'trim|required');
+        $this->form_validation->set_rules('model_year', 'Model Year', 'trim|required');
+        $this->form_validation->set_rules('vehicle_type_id', 'Vehicle Category', 'trim|required');
+        $this->form_validation->set_rules('description', 'Description', 'trim|required');
+        
+        if($this->form_validation->run()){
+            $vehicleType = $this->vehicletype->getWhere($form_data['vehicle_type_id'])->row();
+            $form_data['vehicle_type'] = $vehicleType->vehicle_type;
+            if($this->model->insert($form_data)){
+                $last_id = $this->model->last_id();
+                $vehicle = $this->model->getWhere($last_id)->row();
+                echo send_json(array('message' => 'success', 'data' => $vehicle));
+            }else{
+                echo send_json(array('message' => 'error', 'data' => 'Could Not Add Data Please Try again'));
+            }
+        }else{
+            echo send_json(array('message' => 'error', 'data' => validation_errors()));
+        }
+
+    }
+
+    public function getVehicleajax(){
+        $vehicle_id = $_GET['selected'];
+
+        $vehicle = $this->model->getWhere($vehicle_id)->row();
+        echo send_json(array('message' => 'success', 'data' => $vehicle));
     }
     
     public function save(){

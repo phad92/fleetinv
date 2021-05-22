@@ -216,6 +216,14 @@
             </a>
           </li>
           <li class="nav-item">
+            <a href="<?php echo base_url()?>workshop/newservice" class="nav-link">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                New Service
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
             <a href="<?php echo base_url()?>requestlist/manage" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>

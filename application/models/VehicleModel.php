@@ -21,6 +21,10 @@ class VehicleModel extends CI_Model{
         return $this->db->insert($this->tablename, $data);    
     }
 
+    public function last_id(){
+        return $this->db->insert_id();
+    }
+
     public function update($id, $data){
         $this->db->where('vehicle_id', $id);
         return $this->db->update($this->tablename, $data);
